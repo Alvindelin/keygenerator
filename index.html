@@ -1,0 +1,720 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ALVIN FF - Key Generator</title>
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700;900&family=Rajdhani:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #00f0ff;
+            --secondary: #ff0055;
+            --accent: #ffd700;
+            --dark: #0a0a0f;
+            --darker: #050508;
+            --card: rgba(20, 20, 35, 0.8);
+            --glass: rgba(255, 255, 255, 0.03);
+            --border: rgba(0, 240, 255, 0.15);
+        }
+
+        body {
+            font-family: 'Rajdhani', sans-serif;
+            background: var(--darker);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            color: #fff;
+            overflow-x: hidden;
+            position: relative;
+        }
+
+        /* Animated Background */
+        .bg-animation {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: -1;
+            overflow: hidden;
+        }
+
+        .bg-animation::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: 
+                radial-gradient(circle at 20% 80%, rgba(0, 240, 255, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 80% 20%, rgba(255, 0, 85, 0.08) 0%, transparent 50%),
+                radial-gradient(circle at 50% 50%, rgba(255, 215, 0, 0.03) 0%, transparent 60%);
+            animation: bgPulse 8s ease-in-out infinite;
+        }
+
+        .grid-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                linear-gradient(rgba(0, 240, 255, 0.03) 1px, transparent 1px),
+                linear-gradient(90deg, rgba(0, 240, 255, 0.03) 1px, transparent 1px);
+            background-size: 50px 50px;
+            animation: gridMove 20s linear infinite;
+        }
+
+        @keyframes bgPulse {
+            0%, 100% { transform: scale(1) rotate(0deg); }
+            50% { transform: scale(1.1) rotate(2deg); }
+        }
+
+        @keyframes gridMove {
+            0% { transform: translate(0, 0); }
+            100% { transform: translate(50px, 50px); }
+        }
+
+        /* Floating Particles */
+        .particles {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .particle {
+            position: absolute;
+            width: 4px;
+            height: 4px;
+            background: var(--primary);
+            border-radius: 50%;
+            opacity: 0;
+            animation: float 6s ease-in-out infinite;
+        }
+
+        .particle:nth-child(1) { left: 10%; animation-delay: 0s; animation-duration: 8s; }
+        .particle:nth-child(2) { left: 20%; animation-delay: 1s; animation-duration: 10s; background: var(--secondary); }
+        .particle:nth-child(3) { left: 30%; animation-delay: 2s; animation-duration: 7s; background: var(--accent); }
+        .particle:nth-child(4) { left: 40%; animation-delay: 3s; animation-duration: 9s; }
+        .particle:nth-child(5) { left: 50%; animation-delay: 4s; animation-duration: 11s; background: var(--secondary); }
+        .particle:nth-child(6) { left: 60%; animation-delay: 5s; animation-duration: 8s; background: var(--accent); }
+        .particle:nth-child(7) { left: 70%; animation-delay: 2.5s; animation-duration: 10s; }
+        .particle:nth-child(8) { left: 80%; animation-delay: 1.5s; animation-duration: 7s; background: var(--secondary); }
+        .particle:nth-child(9) { left: 90%; animation-delay: 3.5s; animation-duration: 9s; }
+
+        @keyframes float {
+            0% { transform: translateY(100vh) scale(0); opacity: 0; }
+            10% { opacity: 1; }
+            90% { opacity: 1; }
+            100% { transform: translateY(-10vh) scale(1.5); opacity: 0; }
+        }
+
+        /* Main Container */
+        .container {
+            position: relative;
+            z-index: 1;
+            width: 90%;
+            max-width: 520px;
+            padding: 20px;
+        }
+
+        .card {
+            background: var(--card);
+            backdrop-filter: blur(20px);
+            border: 1px solid var(--border);
+            border-radius: 24px;
+            padding: 40px;
+            box-shadow: 
+                0 0 40px rgba(0, 240, 255, 0.05),
+                0 25px 50px rgba(0, 0, 0, 0.5),
+                inset 0 1px 0 rgba(255, 255, 255, 0.05);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 2px;
+            background: linear-gradient(90deg, transparent, var(--primary), transparent);
+            animation: scanLine 3s linear infinite;
+        }
+
+        @keyframes scanLine {
+            0% { left: -100%; }
+            100% { left: 100%; }
+        }
+
+        /* Header */
+        .header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .logo-icon {
+            font-size: 3em;
+            margin-bottom: 10px;
+            display: inline-block;
+            animation: pulse 2s ease-in-out infinite;
+        }
+
+        @keyframes pulse {
+            0%, 100% { transform: scale(1); filter: drop-shadow(0 0 10px rgba(0, 240, 255, 0.5)); }
+            50% { transform: scale(1.1); filter: drop-shadow(0 0 25px rgba(0, 240, 255, 0.8)); }
+        }
+
+        .title {
+            font-family: 'Orbitron', sans-serif;
+            font-size: 2.2em;
+            font-weight: 900;
+            background: linear-gradient(135deg, var(--primary), var(--accent), var(--secondary));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            letter-spacing: 2px;
+            margin-bottom: 5px;
+        }
+
+        .subtitle {
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 0.95em;
+            font-weight: 300;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+        }
+
+        .divider {
+            height: 1px;
+            background: linear-gradient(90deg, transparent, var(--primary), transparent);
+            margin: 25px 0;
+            opacity: 0.3;
+        }
+
+        /* Key Display */
+        .key-section {
+            margin: 25px 0;
+        }
+
+        .key-label {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            margin-bottom: 12px;
+        }
+
+        .key-label-text {
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.8em;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .key-status {
+            font-size: 0.75em;
+            padding: 4px 12px;
+            border-radius: 20px;
+            background: rgba(255, 255, 255, 0.05);
+            color: rgba(255, 255, 255, 0.3);
+            transition: all 0.3s ease;
+        }
+
+        .key-status.active {
+            background: rgba(0, 240, 255, 0.15);
+            color: var(--primary);
+            box-shadow: 0 0 15px rgba(0, 240, 255, 0.2);
+        }
+
+        .key-display {
+            background: var(--glass);
+            border: 1px solid var(--border);
+            border-radius: 16px;
+            padding: 24px;
+            font-family: 'Orbitron', monospace;
+            font-size: 1.5em;
+            letter-spacing: 4px;
+            color: rgba(255, 255, 255, 0.3);
+            text-align: center;
+            min-height: 70px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            transition: all 0.3s ease;
+        }
+
+        .key-display.has-key {
+            color: var(--primary);
+            text-shadow: 0 0 20px rgba(0, 240, 255, 0.5);
+            border-color: rgba(0, 240, 255, 0.3);
+            background: rgba(0, 240, 255, 0.03);
+        }
+
+        .key-display::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 240, 255, 0.05), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .key-display.has-key::after {
+            left: 100%;
+        }
+
+        /* Buttons */
+        .btn-group {
+            display: flex;
+            gap: 12px;
+            margin: 20px 0;
+        }
+
+        .btn {
+            flex: 1;
+            padding: 16px 24px;
+            border: none;
+            border-radius: 12px;
+            font-family: 'Rajdhani', sans-serif;
+            font-size: 1em;
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .btn:hover::before {
+            left: 100%;
+        }
+
+        .btn-generate {
+            background: linear-gradient(135deg, rgba(0, 240, 255, 0.2), rgba(0, 240, 255, 0.05));
+            color: var(--primary);
+            border: 1px solid rgba(0, 240, 255, 0.3);
+            box-shadow: 0 0 20px rgba(0, 240, 255, 0.1);
+        }
+
+        .btn-generate:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(0, 240, 255, 0.2);
+            border-color: var(--primary);
+        }
+
+        .btn-generate:active {
+            transform: translateY(0);
+        }
+
+        .btn-generate:disabled {
+            opacity: 0.5;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-copy {
+            background: linear-gradient(135deg, rgba(255, 215, 0, 0.2), rgba(255, 215, 0, 0.05));
+            color: var(--accent);
+            border: 1px solid rgba(255, 215, 0, 0.3);
+            box-shadow: 0 0 20px rgba(255, 215, 0, 0.1);
+            display: none;
+        }
+
+        .btn-copy.show {
+            display: block;
+        }
+
+        .btn-copy:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 30px rgba(255, 215, 0, 0.2);
+            border-color: var(--accent);
+        }
+
+        /* Loading */
+        .loading-container {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+
+        .loading-spinner {
+            width: 20px;
+            height: 20px;
+            border: 2px solid rgba(0, 240, 255, 0.2);
+            border-top-color: var(--primary);
+            border-radius: 50%;
+            animation: spin 0.8s linear infinite;
+        }
+
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+
+        .loading-text {
+            color: var(--primary);
+            font-size: 0.9em;
+        }
+
+        /* Status Message */
+        .status {
+            margin: 15px 0;
+            padding: 14px 18px;
+            border-radius: 12px;
+            font-size: 0.9em;
+            font-weight: 500;
+            display: none;
+            align-items: center;
+            gap: 10px;
+            animation: slideIn 0.3s ease;
+        }
+
+        @keyframes slideIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .status.success {
+            display: flex;
+            background: rgba(0, 240, 255, 0.1);
+            border: 1px solid rgba(0, 240, 255, 0.2);
+            color: var(--primary);
+        }
+
+        .status.error {
+            display: flex;
+            background: rgba(255, 0, 85, 0.1);
+            border: 1px solid rgba(255, 0, 85, 0.2);
+            color: var(--secondary);
+        }
+
+        .status-icon {
+            font-size: 1.2em;
+        }
+
+        /* Info Card */
+        .info-card {
+            background: var(--glass);
+            border: 1px solid rgba(255, 255, 255, 0.05);
+            border-radius: 16px;
+            padding: 20px;
+            margin-top: 20px;
+        }
+
+        .info-header {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            margin-bottom: 15px;
+        }
+
+        .info-icon {
+            font-size: 1.3em;
+        }
+
+        .info-title {
+            color: var(--accent);
+            font-family: 'Orbitron', sans-serif;
+            font-size: 0.85em;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+        }
+
+        .info-list {
+            list-style: none;
+        }
+
+        .info-item {
+            padding: 8px 0;
+            padding-left: 24px;
+            position: relative;
+            color: rgba(255, 255, 255, 0.5);
+            font-size: 0.85em;
+            line-height: 1.5;
+        }
+
+        .info-item::before {
+            content: '▸';
+            position: absolute;
+            left: 0;
+            color: var(--primary);
+            font-weight: bold;
+        }
+
+        /* Footer */
+        .footer {
+            text-align: center;
+            margin-top: 25px;
+            padding-top: 20px;
+            border-top: 1px solid rgba(255, 255, 255, 0.05);
+        }
+
+        .footer-text {
+            color: rgba(255, 255, 255, 0.3);
+            font-size: 0.75em;
+            letter-spacing: 2px;
+        }
+
+        .footer-brand {
+            color: var(--primary);
+            font-weight: 600;
+        }
+
+        /* Glow Effect */
+        .glow {
+            position: absolute;
+            width: 200px;
+            height: 200px;
+            border-radius: 50%;
+            filter: blur(80px);
+            opacity: 0.3;
+            pointer-events: none;
+        }
+
+        .glow-1 {
+            top: -50px;
+            left: -50px;
+            background: var(--primary);
+        }
+
+        .glow-2 {
+            bottom: -50px;
+            right: -50px;
+            background: var(--secondary);
+        }
+
+        /* Responsive */
+        @media (max-width: 480px) {
+            .card { padding: 25px; }
+            .title { font-size: 1.8em; }
+            .key-display { font-size: 1.2em; letter-spacing: 2px; }
+            .btn-group { flex-direction: column; }
+        }
+    </style>
+</head>
+<body>
+    <!-- Background Animation -->
+    <div class="bg-animation">
+        <div class="grid-overlay"></div>
+    </div>
+
+    <!-- Floating Particles -->
+    <div class="particles">
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+        <div class="particle"></div>
+    </div>
+
+    <!-- Main Container -->
+    <div class="container">
+        <div class="card">
+            <!-- Glow Effects -->
+            <div class="glow glow-1"></div>
+            <div class="glow glow-2"></div>
+
+            <!-- Header -->
+            <div class="header">
+                <div class="logo-icon">⚡</div>
+                <h1 class="title">ALVIN FF</h1>
+                <p class="subtitle">Key Generator System</p>
+            </div>
+
+            <div class="divider"></div>
+
+            <!-- Key Display -->
+            <div class="key-section">
+                <div class="key-label">
+                    <span class="key-label-text">Generated Key</span>
+                    <span class="key-status" id="keyStatus">WAITING</span>
+                </div>
+                <div class="key-display empty" id="keyDisplay">
+                    READY TO GENERATE
+                </div>
+            </div>
+
+            <!-- Buttons -->
+            <div class="btn-group">
+                <button class="btn btn-generate" id="btnGenerate" onclick="generateKey()">
+                    <span id="btnText">🔥 GENERATE</span>
+                </button>
+                <button class="btn btn-copy" id="btnCopy" onclick="copyKey()">
+                    📋 COPY
+                </button>
+            </div>
+
+            <!-- Status -->
+            <div class="status" id="status">
+                <span class="status-icon" id="statusIcon">✓</span>
+                <span id="statusText"></span>
+            </div>
+
+            <!-- Info -->
+            <div class="info-card">
+                <div class="info-header">
+                    <span class="info-icon">📌</span>
+                    <span class="info-title">How to Use</span>
+                </div>
+                <ul class="info-list">
+                    <li class="info-item">Click "GENERATE" to create a new activation key</li>
+                    <li class="info-item">Copy the generated key to your clipboard</li>
+                    <li class="info-item">Paste the key into ALVIN FF Checker script</li>
+                    <li class="info-item">Key is valid for 24 hours (1 day)</li>
+                    <li class="info-item">Each key can only be used on 1 device</li>
+                </ul>
+            </div>
+
+            <!-- Footer -->
+            <div class="footer">
+                <p class="footer-text">
+                    Made with ❤️ by <span class="footer-brand">ALVIN FF TEAM</span>
+                </p>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // API URL - Auto detect current domain (Render)
+        const API_URL = window.location.origin;
+
+        let currentKey = '';
+
+        async function generateKey() {
+            const btn = document.getElementById('btnGenerate');
+            const btnText = document.getElementById('btnText');
+            const display = document.getElementById('keyDisplay');
+            const status = document.getElementById('status');
+            const statusIcon = document.getElementById('statusIcon');
+            const statusText = document.getElementById('statusText');
+            const copyBtn = document.getElementById('btnCopy');
+            const keyStatus = document.getElementById('keyStatus');
+
+            // Loading state
+            btn.disabled = true;
+            btnText.innerHTML = '<div class="loading-container"><div class="loading-spinner"></div><span class="loading-text">GENERATING...</span></div>';
+            display.classList.remove('has-key');
+            display.classList.add('empty');
+            display.textContent = 'GENERATING...';
+            status.className = 'status';
+            copyBtn.classList.remove('show');
+            keyStatus.textContent = 'GENERATING';
+            keyStatus.className = 'key-status';
+
+            try {
+                const response = await fetch(`${API_URL}/api/generate`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' }
+                });
+
+                const data = await response.json();
+
+                if (data.success) {
+                    currentKey = data.key;
+                    
+                    // Update display
+                    display.classList.remove('empty');
+                    display.classList.add('has-key');
+                    display.textContent = data.key;
+                    
+                    // Update status
+                    keyStatus.textContent = 'ACTIVE';
+                    keyStatus.classList.add('active');
+                    
+                    // Show success
+                    status.className = 'status success';
+                    statusIcon.textContent = '✓';
+                    statusText.innerHTML = `Key generated! Valid for <b>24 hours</b>.`;
+                    
+                    // Show copy button
+                    copyBtn.classList.add('show');
+                } else {
+                    throw new Error(data.message || 'Failed to generate key');
+                }
+            } catch (error) {
+                display.classList.add('empty');
+                display.classList.remove('has-key');
+                display.textContent = 'ERROR';
+                
+                keyStatus.textContent = 'FAILED';
+                
+                status.className = 'status error';
+                statusIcon.textContent = '✗';
+                statusText.textContent = error.message;
+            }
+
+            // Reset button
+            btn.disabled = false;
+            btnText.innerHTML = '🔥 GENERATE';
+        }
+
+        function copyKey() {
+            if (!currentKey) return;
+
+            navigator.clipboard.writeText(currentKey).then(() => {
+                const status = document.getElementById('status');
+                const statusIcon = document.getElementById('statusIcon');
+                const statusText = document.getElementById('statusText');
+                
+                status.className = 'status success';
+                statusIcon.textContent = '📋';
+                statusText.textContent = 'Key copied to clipboard!';
+                
+                setTimeout(() => {
+                    status.className = 'status';
+                }, 2000);
+            }).catch(() => {
+                // Fallback
+                const textArea = document.createElement('textarea');
+                textArea.value = currentKey;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                
+                const status = document.getElementById('status');
+                const statusIcon = document.getElementById('statusIcon');
+                const statusText = document.getElementById('statusText');
+                
+                status.className = 'status success';
+                statusIcon.textContent = '📋';
+                statusText.textContent = 'Key copied!';
+            });
+        }
+    </script>
+</body>
+</html>
